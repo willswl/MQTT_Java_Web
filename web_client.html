@@ -21,7 +21,7 @@ function onConnect() {
   //client.subscribe("/World_Web");
   client.subscribe("/World_Native");
   message = new Paho.MQTT.Message("Hello Java");
-  message.destinationName = "/World_Native";
+  message.destinationName = "/World_Web";
   client.send(message);
 };
 function onConnectFailed() {
