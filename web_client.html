@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>Hello MQTT</h1>
+
+<p id="demo">MQTT Content</p>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
+<script>
+document.getElementById("demo").innerHTML="start connecting";
+client = new Paho.MQTT.Client("192.168.254.130", Number("9001"), "clientId");
+
+client.connect({onSuccess:onConnect,onFailure:onConnectFailed});
+
+client.onConnectionLost = onConnectionLost;
+client.onMessageArrived = onMessageArrived;
+function onConnect() {
+  // Once a connection has been made, make a subscription and send a message.
+  //console.log("onConnect");
+  document.write("connected success<br />"); 
+  //client.subscribe("/World_Web");
+  client.subscribe("/World_Native");
+  message = new Paho.MQTT.Message("Hello Java");
+  message.destinationName = "/World_Native";
+  client.send(message);
+};
+function onConnectFailed() {
+  // Once a connection has been made, make a subscription and send a message.
+  //console.log("onConnect");
+  document.write("connected failed<br />");
+  
+};
+function onConnectionLost(responseObject) {
+  if (responseObject.errorCode !== 0)
+    document.write(responseObject.errorMessage);
+    //console.log("onConnectionLost:"+responseObject.errorMessage);
+};
+function onMessageArrived(message) {
+  //console.log("onMessageArrived:"+message.payloadString);
+  //client.disconnect();
+
+  document.write("message received from topic : ");
+  document.write(message.destinationName);
+  document.write(" is : <br />");
+  document.write(message.payloadString);
+  document.write("<br />");
+};
+</script>
+
+</body>
+</html>
